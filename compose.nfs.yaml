@@ -1,0 +1,15 @@
+# Read the TeslaCam folder straight from an NFS export instead of a local path:
+#   docker compose -f compose.yaml -f compose.nfs.yaml up -d
+# Set NFS_HOST and NFS_EXPORT in .env. TESLACAM_PATH must still be set; it is
+# replaced by the NFS volume.
+services:
+  archive:
+    volumes:
+      - nfs-archive:/sources/local:ro
+volumes:
+  nfs-archive:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_HOST:?Set NFS_HOST},nfsvers=4,ro
+      device: ":${NFS_EXPORT:?Set NFS_EXPORT}"

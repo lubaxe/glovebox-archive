@@ -1,0 +1,7 @@
+.env
+sources.json
+data/
+keep/
+imports/
+__pycache__/
+*.pyc

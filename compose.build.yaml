@@ -1,0 +1,7 @@
+# Build the images from this checkout instead of pulling them:
+#   docker compose -f compose.yaml -f compose.build.yaml up -d --build
+services:
+  archive:
+    build: ./library
+  importer:
+    build: ./importer

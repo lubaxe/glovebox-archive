@@ -1,0 +1,53 @@
+# Glovebox Archive: browse, play and keep the TeslaCam footage your Glovebox
+# backs up. Settings come from .env (copy .env.example); see README.md.
+name: glovebox-archive
+
+services:
+  archive:
+    image: ghcr.io/lubaxe/glovebox-archive:${VERSION:-latest}
+    restart: unless-stopped
+    ports:
+      - "${PORT:-5500}:8000"
+    environment:
+      TZ: ${TZ:-UTC}
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      DRIVE_GAP_SECONDS: ${DRIVE_GAP_SECONDS:-300}
+    volumes:
+      # The folder holding RecentClips / SavedClips / SentryClips. Read-only:
+      # the archive never changes or deletes your footage.
+      - ${TESLACAM_PATH:?Set TESLACAM_PATH in .env to your TeslaCam folder}:/sources/local:ro
+      - ${IMPORT_PATH:-./imports}:/sources/imports:ro
+      # Kept originals: copies that outlive your normal cleanup.
+      - ${KEEP_PATH:-./keep}:/retained
+      # Notes, tags and preview images.
+      - ${DATA_PATH:-./data}:/data
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging: &logging
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  # Optional: copy footage from other places (SMB, SFTP, cloud, rsync) into
+  # IMPORT_PATH. Enable with `docker compose --profile remote up -d` after
+  # creating sources.json; see README.md.
+  importer:
+    profiles: [remote]
+    image: ghcr.io/lubaxe/glovebox-archive-importer:${VERSION:-latest}
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ:-UTC}
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      IMPORT_INTERVAL: ${IMPORT_INTERVAL:-900}
+    volumes:
+      - ./sources.json:/settings/sources.json:ro
+      - ${DATA_PATH:-./data}/rclone:/config/rclone
+      - ${DATA_PATH:-./data}/ssh:/ssh:ro
+      - ${IMPORT_PATH:-./imports}:/imports
+    logging: *logging

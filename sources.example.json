@@ -1,0 +1,17 @@
+[
+  {
+    "name": "cloud",
+    "type": "rclone",
+    "source": "myremote:TeslaCam"
+  },
+  {
+    "name": "ssh-nas",
+    "type": "rsync",
+    "source": "teslapi@nas.example:/srv/TeslaCam/"
+  },
+  {
+    "name": "rsync-daemon",
+    "type": "rsync",
+    "source": "rsync://nas.example/teslacam/"
+  }
+]

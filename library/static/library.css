@@ -1,0 +1,41 @@
+/* Archive additions to Glovebox's unchanged device stylesheet. */
+.import-status{padding:12px 34px;color:var(--warn);border-bottom:1px solid var(--line)}
+.import-status:empty{display:none}
+.archive-filters{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 22px}
+.archive-filters input{flex:1;min-width:180px}
+.archive-filters select{max-width:240px}
+.retention-panel{margin-top:22px}
+.retention-panel h3{margin:0 0 8px}
+.retention-panel textarea{min-height:90px;font-family:inherit}
+.retention-panel .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.retention-panel label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)}
+.retention-panel .keep-status{color:var(--ok)}
+.archive-path{overflow-wrap:anywhere;font-family:var(--mono);font-size:11px}
+.card-sub{overflow-wrap:anywhere;display:block}
+.thumb .badge.kept{background:var(--ok);color:var(--bg)}
+.archive-pager{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:24px}
+.archive-summary{margin:0 0 20px}
+.source-row{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.source-row:last-child{border-bottom:0}
+@media(max-width:860px){.import-status{padding:12px 18px}.archive-filters select{max-width:100%}}
+.archive-card{position:relative}.card-link{display:block;text-decoration:none;color:inherit}
+.preview-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:preview-in .25s ease-out}
+.preview-state{position:absolute;inset:0;display:grid;place-content:center;gap:10px;color:var(--muted);font-size:12px;text-align:center;z-index:1}
+.preview-pending{background:linear-gradient(110deg,var(--surface-2) 20%,var(--surface-3) 40%,var(--surface-2) 60%);background-size:220% 100%;animation:preview-shimmer 1.7s infinite}
+.preview-pending .preview-state:before,.stream-loading .camera-loading:before{content:'';width:19px;height:19px;border:2px solid #ffffff35;border-top-color:var(--accent);border-radius:50%;display:block;margin:auto;animation:preview-spin .9s linear infinite}
+.preview-retry{position:absolute;top:45%;left:50%;transform:translate(-50%,12px);z-index:2;font-size:11px;min-height:30px;padding:4px 10px}
+.camera-loading{display:none;position:absolute;inset:0;align-content:center;justify-content:center;text-align:center;font-size:13px;gap:12px;background:#10151cd9;color:#dce5f4}
+.stream-loading .camera-loading,.stream-error .camera-loading{display:grid}
+.camera-choice.loading canvas{opacity:.2}.camera-choice.loading:after{content:'Loading…';position:absolute;inset:25% 0 auto;text-align:center;font-size:11px;color:#dce5f4}
+.viewer-details .retention-panel{background:#1d2633;color:#fff;padding:16px}
+.viewer-details .retention-panel input,.viewer-details .retention-panel textarea{background:#10151c;color:#fff;border-color:#465267}
+.viewer-details .fields{grid-template-columns:1fr}
+.viewer-open > .import-status{display:none}
+@keyframes preview-spin{to{transform:rotate(360deg)}}@keyframes preview-shimmer{to{background-position:-220% 0}}@keyframes preview-in{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.preview-pending,.preview-image,.preview-state:before,.camera-loading:before{animation:none!important}}
+.cinema-viewer .cam.missing::after{content:'No camera file in this backup';color:#aab7c9;background:#111722;text-align:center;font-size:12px;padding:18px}
+.cinema-viewer .cam.missing .label{display:block!important;z-index:1}
+.recording-loading{display:grid;place-content:center;justify-items:center;gap:18px;color:#dce5f4}
+.recording-spinner{width:28px;height:28px;border:3px solid #ffffff30;border-top-color:#9abaff;border-radius:50%;animation:preview-spin .9s linear infinite}
+/* The next minute buffers in a spare video stacked under the one showing. */
+.cam video.spare{position:absolute;inset:0;opacity:0;pointer-events:none}
